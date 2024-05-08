@@ -1,44 +1,40 @@
-import "./App.css";
-import { derivative, isNumeric, typeOf } from "mathjs";
-import { useMemo, useState } from "react";
+import ExpressionInput from "./ExpressionInput";
+import { useState } from "react";
 
 function App() {
-	const [expression, setExpression] = useState("x^2 + 4 * y - 5 * z");
-	const [variable, setVariable] = useState("x");
-	const derivative2 = useMemo(() => derivative(expression, variable), [expression, variable]);
-	// const sign2 = useMemo(() => sign(derivative2), [derivative2]);
+	const [expressions, setExpressions] = useState<string[]>([]);
 
-	console.log(derivative2);
-	console.log(typeOf(derivative2));
-	console.log(isNumeric(derivative2.toString()));
-	// console.log(evaluate(derivative2.toString()));
+	function onExpressionChanged(newExpression: string, index: number) {
+		const newExpressions = [...expressions];
+		newExpressions[index] = newExpression;
+		setExpressions(newExpressions);
+	}
+
+	function removeExpression(index: number) {
+		const newExpressions = [...expressions];
+		newExpressions.splice(index, 1);
+		setExpressions(newExpressions);
+	}
+
+	function createExpression() {
+		setExpressions([...expressions, ""]);
+	}
 
 	return (
 		<>
-			<div>
-				<label>Expression: </label>
-				<input
-					type="text"
-					value={expression}
-					onChange={(e) => {
-						setExpression(e.currentTarget.value);
-					}}
-				/>
-			</div>
-			<div>
-				<label>Variable: </label>
-				<input
-					type="text"
-					value={variable}
-					onChange={(e) => {
-						setVariable(e.currentTarget.value);
-					}}
-				/>
-			</div>
-			<p>
-				Derivative: <span>{derivative2.toString()}</span>
-				{/* Sign: <span>{sign2}</span> */}
-			</p>
+			<main className="mx-auto flex size-full flex-col items-center justify-center gap-4 py-6">
+				{expressions.map((expression, index) => (
+					<div key={index} className="flex size-full items-center justify-center gap-4">
+						<ExpressionInput expression={expression} onExpressionChanged={(newExpression) => onExpressionChanged(newExpression, index)} />
+						<button className="rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700" onClick={() => removeExpression(index)}>
+							X
+						</button>
+					</div>
+				))}
+				<button className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700" onClick={() => createExpression()}>
+					Add Output
+				</button>
+			</main>
 		</>
 	);
 }
