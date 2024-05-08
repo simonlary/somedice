@@ -1,8 +1,9 @@
 import ExpressionInput from "./ExpressionInput";
+import Visualizer from "./Visualizer";
 import { useState } from "react";
 
-function App() {
-	const [expressions, setExpressions] = useState<string[]>([]);
+export default function App() {
+	const [expressions, setExpressions] = useState<string[]>(["1d6 + 3 - 1d4"]);
 
 	function onExpressionChanged(newExpression: string, index: number) {
 		const newExpressions = [...expressions];
@@ -34,9 +35,8 @@ function App() {
 				<button className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700" onClick={() => createExpression()}>
 					Add Output
 				</button>
+				<Visualizer expression={expressions[0]} />
 			</main>
 		</>
 	);
 }
-
-export default App;
