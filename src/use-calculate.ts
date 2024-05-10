@@ -67,7 +67,7 @@ function calculateProbabilityDistribution(expression: string) {
 		);
 	}
 
-	return Array.from(totalProbabilities.entries());
+	return Array.from(totalProbabilities.entries()).sort(([a], [b]) => a - b);
 }
 
 interface Variable {
@@ -80,13 +80,14 @@ function getErrorMessage(error: unknown) {
 	return String(error);
 }
 
-export function useProbabilityDistribution(expression: string) {
+export function useProbabilityDistribution(
+	expression: string,
+): { isValid: true; data: [number, number][] } | { isValid: false; error: string } {
 	return useMemo(() => {
 		try {
-			const result = calculateProbabilityDistribution(expression);
-			return { result };
+			return { isValid: true, data: calculateProbabilityDistribution(expression) };
 		} catch (error) {
-			return { error: getErrorMessage(error) };
+			return { isValid: false, error: getErrorMessage(error) };
 		}
 	}, [expression]);
 }
