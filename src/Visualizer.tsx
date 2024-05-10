@@ -57,18 +57,24 @@ function extractVariables(expression: string) {
 	return { variables, replacedExpression };
 }
 
-const expression = "1d6 ^ 1d4";
+function cartesian(arrays: number[][]) {
+	return arrays.reduce<number[][]>((a, b) => a.flatMap((d) => b.map((e) => [...d, e])), [[]]);
+}
+
+const expression = "2d6 + 1d4";
 const { variables, replacedExpression } = extractVariables(expression);
 const compiledExpression = compile(replacedExpression);
 
 const totalProbabilities = new Map<number, number>();
-const probabilities0 = Array.from(variables[0].probabilities.entries());
-const probabilities1 = Array.from(variables[1].probabilities.entries());
-for (const [value0, probability0] of probabilities0) {
-	for (const [value1, probability1] of probabilities1) {
-		const result = compiledExpression.evaluate({ x1: value0, x2: value1 }) as number;
-		totalProbabilities.set(result, (totalProbabilities.get(result) ?? 0) + probability0 * probability1);
-	}
+
+for (const outcomes of cartesian(variables.map((variable) => Array.from(variable.probabilities.keys())))) {
+	const result = compiledExpression.evaluate(
+		Object.fromEntries(variables.map((variable, index) => [variable.variableName, outcomes[index]])),
+	) as number;
+	totalProbabilities.set(
+		result,
+		(totalProbabilities.get(result) ?? 0) + outcomes.reduce((acc, value, index) => acc * variables[index].probabilities.get(value)!, 1),
+	);
 }
 
 console.log(totalProbabilities);
