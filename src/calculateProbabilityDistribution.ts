@@ -15,6 +15,10 @@ export function calculateExpressionProbabilityDistribution(expression: string) {
 	// Evaluate the expression with every possible outcome of the dice rolls and calculate the probability of each result
 	const totalProbabilities = new Map<number, number>();
 	const possibleOutcomesPerDie = variableProbabilities.map((probabilities) => Array.from(probabilities.keys()));
+	const totalNumberOfOutcomes = possibleOutcomesPerDie.reduce((acc, outcomes) => acc * outcomes.length, 1);
+	if (totalNumberOfOutcomes > 100_000) {
+		throw new Error("The number of possible outcomes is too large.");
+	}
 	for (const diceOutcomes of cartesianProduct(possibleOutcomesPerDie)) {
 		const scope = Object.fromEntries(variables.map((variable, index) => [variable.name, diceOutcomes[index]]));
 		const result = compiledExpression.evaluate(scope) as number; // TODO: Validate that this is a number
@@ -44,6 +48,10 @@ function extractVariables(expression: string) {
 }
 
 function calculateDiceRollProbabilityDistribution(numDice: number, numSides: number) {
+	if (numDice * numSides > 10_000) {
+		throw new Error(`The number of possible outcomes of ${numDice}d${numSides} is too large.`);
+	}
+
 	// Create a 2D array to store probability distributions for each number of dice.
 	const dp = new Array(numDice + 1).fill(null).map(() => new Array<number>(numSides * numDice + 1).fill(0));
 
