@@ -31,7 +31,7 @@ export function calculateExpressionProbabilityDistribution(expression: string) {
 		);
 	}
 
-	return Array.from(totalProbabilities.entries()).sort(([a], [b]) => a - b);
+	return totalProbabilities;
 }
 
 function extractVariables(expression: string) {
