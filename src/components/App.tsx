@@ -1,3 +1,4 @@
+import Button from "./Button";
 import ExpressionInput from "./ExpressionInput";
 import Visualizer from "./Visualizer";
 import { useState } from "react";
@@ -27,14 +28,19 @@ export default function App() {
 				{expressions.map((expression, index) => (
 					<div key={index} className="flex size-full items-center justify-center gap-4">
 						<ExpressionInput expression={expression} onExpressionChanged={(newExpression) => onExpressionChanged(newExpression, index)} />
-						<button className="rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700" onClick={() => removeExpression(index)}>
+						<Button variant="danger" onClick={() => removeExpression(index)}>
 							X
-						</button>
+						</Button>
 					</div>
 				))}
-				<button className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700" onClick={() => createExpression()}>
-					Add Output
-				</button>
+				<div className="flex gap-3">
+					<Button variant="primary" onClick={() => createExpression()}>
+						Add Output
+					</Button>
+					<Button variant="primary" onClick={() => createExpression()}>
+						Calculate
+					</Button>
+				</div>
 				<Visualizer expression={expressions[0]} />
 			</main>
 		</>
