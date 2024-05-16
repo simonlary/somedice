@@ -1,4 +1,4 @@
-import { compile } from "mathjs";
+import { compile } from "mathjs/number";
 
 export function calculateExpressionProbabilityDistribution(expression: string) {
 	// Replace dice roll expressions with variable names x1, x2, etc
@@ -21,7 +21,10 @@ export function calculateExpressionProbabilityDistribution(expression: string) {
 	}
 	for (const diceOutcomes of cartesianProduct(possibleOutcomesPerDie)) {
 		const scope = Object.fromEntries(variables.map((variable, index) => [variable.name, diceOutcomes[index]]));
-		const result = compiledExpression.evaluate(scope) as number; // TODO: Validate that this is a number
+		const result = compiledExpression.evaluate(scope) as unknown;
+		if (typeof result !== "number") {
+			throw new Error("Invalid expression.");
+		}
 		totalProbabilities.set(
 			result,
 			(totalProbabilities.get(result) ?? 0) + diceOutcomes.reduce((acc, value, index) => acc * variableProbabilities[index].get(value)!, 1),

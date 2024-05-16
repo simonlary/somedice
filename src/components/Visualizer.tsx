@@ -1,6 +1,6 @@
+import { useProbabilityDistribution } from "../hooks/use-probability-distribution";
 import GraphVisualizer from "./GraphVisualizer";
 import TableVisualizer from "./TableVisualizer";
-import { useProbabilityDistribution } from "./use-calculate";
 
 export default function Visualizer({ expression }: Props) {
 	const result = useProbabilityDistribution(expression);

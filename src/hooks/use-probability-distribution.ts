@@ -1,4 +1,4 @@
-import { calculateExpressionProbabilityDistribution } from "./calculateProbabilityDistribution";
+import { calculateExpressionProbabilityDistribution } from "../utils/calculate-probability-distribution";
 import { useMemo } from "react";
 
 export function useProbabilityDistribution(
