@@ -1,38 +1,44 @@
+import { expose } from "comlink";
 import { compile } from "mathjs/number";
 
-export function calculateExpressionProbabilityDistribution(expression: string) {
-	// Replace dice roll expressions with variable names x1, x2, etc
-	const { variables, replacedExpression } = extractVariables(expression);
+export class Calculator {
+	calculateExpressionProbabilityDistribution(expression: string) {
+		// Replace dice roll expressions with variable names x1, x2, etc
+		const { variables, replacedExpression } = extractVariables(expression);
 
-	// Calculate the probability distributions for each variable
-	const variableProbabilities = variables.map((variable) =>
-		calculateDiceRollProbabilityDistribution(variable.numberOfDice, variable.numberOfSides),
-	);
-
-	// Compile the expression for faster subsequent evaluations
-	const compiledExpression = compile(replacedExpression);
-
-	// Evaluate the expression with every possible outcome of the dice rolls and calculate the probability of each result
-	const totalProbabilities = new Map<number, number>();
-	const possibleOutcomesPerDie = variableProbabilities.map((probabilities) => Array.from(probabilities.keys()));
-	const totalNumberOfOutcomes = possibleOutcomesPerDie.reduce((acc, outcomes) => acc * outcomes.length, 1);
-	if (totalNumberOfOutcomes > 100_000) {
-		throw new Error("The number of possible outcomes is too large.");
-	}
-	for (const diceOutcomes of cartesianProduct(possibleOutcomesPerDie)) {
-		const scope = Object.fromEntries(variables.map((variable, index) => [variable.name, diceOutcomes[index]]));
-		const result = compiledExpression.evaluate(scope) as unknown;
-		if (typeof result !== "number") {
-			throw new Error("Invalid expression.");
-		}
-		totalProbabilities.set(
-			result,
-			(totalProbabilities.get(result) ?? 0) + diceOutcomes.reduce((acc, value, index) => acc * variableProbabilities[index].get(value)!, 1),
+		// Calculate the probability distributions for each variable
+		const variableProbabilities = variables.map((variable) =>
+			calculateDiceRollProbabilityDistribution(variable.numberOfDice, variable.numberOfSides),
 		);
-	}
 
-	return totalProbabilities;
+		// Compile the expression for faster subsequent evaluations
+		const compiledExpression = compile(replacedExpression);
+
+		// Evaluate the expression with every possible outcome of the dice rolls and calculate the probability of each result
+		const totalProbabilities = new Map<number, number>();
+		const possibleOutcomesPerDie = variableProbabilities.map((probabilities) => Array.from(probabilities.keys()));
+		const totalNumberOfOutcomes = possibleOutcomesPerDie.reduce((acc, outcomes) => acc * outcomes.length, 1);
+		if (totalNumberOfOutcomes > 1_000_000) {
+			throw new Error("The number of possible outcomes is too large.");
+		}
+		for (const diceOutcomes of cartesianProduct(possibleOutcomesPerDie)) {
+			const scope = Object.fromEntries(variables.map((variable, index) => [variable.name, diceOutcomes[index]]));
+			const result = compiledExpression.evaluate(scope) as unknown;
+			if (typeof result !== "number") {
+				throw new Error("Invalid expression.");
+			}
+			totalProbabilities.set(
+				result,
+				(totalProbabilities.get(result) ?? 0) +
+					diceOutcomes.reduce((acc, value, index) => acc * variableProbabilities[index].get(value)!, 1),
+			);
+		}
+
+		return totalProbabilities;
+	}
 }
+
+expose(new Calculator());
 
 function extractVariables(expression: string) {
 	const diceRegex = /(\d+)d(\d+)/g;
