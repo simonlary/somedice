@@ -2,12 +2,14 @@ import GraphVisualizer from "./GraphVisualizer";
 import TableVisualizer from "./TableVisualizer";
 
 export default function Visualizer({ distribution }: Props) {
-	const result2 = Array.from(distribution.entries()).sort(([a], [b]) => a - b);
+	const data = Array.from(distribution.entries())
+		.map(([result, probability]) => ({ result, probability }))
+		.sort((a, b) => a.result - b.result);
 
 	return (
 		<>
-			<GraphVisualizer data={result2} />
-			<TableVisualizer data={result2} />
+			<GraphVisualizer data={data} />
+			<TableVisualizer data={data} />
 		</>
 	);
 }
