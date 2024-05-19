@@ -4,13 +4,13 @@ import Visualizer from "./Visualizer";
 import { useState } from "react";
 
 export default function App() {
-	const [expression, setExpression] = useState("1d6 + 3 - 1d4");
+	const [expression, setExpression] = useState("3d6");
 
 	const { distribution, error, status, calculate } = useProbabilityDistribution(expression);
 
 	return (
 		<>
-			<main className="mx-auto flex size-full flex-col items-center justify-center gap-4 px-2 py-6">
+			<main className="px- mx-auto flex size-full flex-col items-center justify-center gap-4 px-4 py-6">
 				<form
 					className="mx-auto flex size-full flex-col items-center justify-center gap-4"
 					onSubmit={(e) => {
