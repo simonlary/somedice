@@ -1,5 +1,5 @@
 import GraphVisualizer from "./GraphVisualizer";
-import TableVisualizer from "./TableVisualizer";
+import Metrics from "./Metrics";
 
 export default function Visualizer({ distribution }: Props) {
 	const data = Array.from(distribution.entries())
@@ -8,8 +8,8 @@ export default function Visualizer({ distribution }: Props) {
 
 	return (
 		<>
+			<Metrics data={data} />
 			<GraphVisualizer data={data} />
-			<TableVisualizer data={data} />
 		</>
 	);
 }

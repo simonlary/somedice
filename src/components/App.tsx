@@ -28,7 +28,7 @@ export default function App() {
 					/>
 					<Button variant="primary">Calculate</Button>
 				</form>
-				{status === "loading" && <div className="text-white">Loading...</div>}
+				{status === "loading" && <div className="text-white">Calculating...</div>}
 				{status === "error" && <div className="text-white">Error: {error}</div>}
 				{status === "success" && <Visualizer distribution={distribution} />}
 			</main>
