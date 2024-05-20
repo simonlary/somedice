@@ -3,7 +3,7 @@ import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxi
 export default function GraphVisualizer({ data }: Props) {
 	const formattedData = data.map(({ result, probability }) => ({ result, probability: probability * 100 }));
 	return (
-		<div className="w-full text-white overflow-hidden max-w-4xl">
+		<div className="w-full max-w-4xl overflow-hidden text-white">
 			<ResponsiveContainer width="100%" height={30 * formattedData.length}>
 				<BarChart data={formattedData} layout="vertical">
 					<CartesianGrid horizontal={false} strokeDasharray={4} />

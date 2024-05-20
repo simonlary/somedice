@@ -10,7 +10,7 @@ export default function App() {
 
 	return (
 		<>
-			<main className="px- mx-auto flex size-full flex-col items-center justify-center gap-4 px-4 py-6">
+			<main className="mx-auto flex size-full flex-col items-center justify-center gap-4 px-4 py-6">
 				<form
 					className="mx-auto flex size-full flex-col items-center justify-center gap-4"
 					onSubmit={(e) => {
