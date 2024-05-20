@@ -3,15 +3,15 @@ import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxi
 export default function GraphVisualizer({ data }: Props) {
 	const formattedData = data.map(({ result, probability }) => ({ result, probability: probability * 100 }));
 	return (
-		<div className="w-full text-white">
-			<ResponsiveContainer width="100%" aspect={16 / 9}>
+		<div className="w-full text-white overflow-hidden max-w-4xl">
+			<ResponsiveContainer width="100%" height={30 * formattedData.length}>
 				<BarChart data={formattedData} layout="vertical">
 					<CartesianGrid horizontal={false} strokeDasharray={4} />
 					<XAxis dataKey="probability" tick={{ fill: "white" }} unit="%" type="number" />
 					<YAxis dataKey="result" tick={{ fill: "white" }} type="category" interval={0} />
 					<Tooltip
 						itemStyle={{ color: "white" }}
-						contentStyle={{ backgroundColor: "#334155", padding: "0rem 0.5rem", border: "none", borderRadius: "0.5rem" }}
+						contentStyle={{ backgroundColor: "#334155", padding: "0 0.5rem", border: "none", borderRadius: "0.5rem" }}
 						labelFormatter={() => ""}
 						formatter={(value: number) => value.toFixed(2)}
 						animationDuration={300}
