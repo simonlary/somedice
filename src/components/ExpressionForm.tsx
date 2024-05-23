@@ -18,7 +18,7 @@ export default function ExpressionForm({ onCalculate }: Props) {
 					type="text"
 					name="expression"
 					placeholder="2d6 + 1d4 - 3"
-					className="w-full max-w-prose appearance-none rounded border px-3 py-2 text-gray-700"
+					className="w-full max-w-prose rounded border px-3 py-2 text-black"
 				/>
 			</div>
 			<Button variant="primary">Calculate</Button>
