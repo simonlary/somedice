@@ -4,14 +4,16 @@ import { useCallback, useState } from "react";
 
 const calculator = wrap<Calculator>(new Worker(new URL("./calculator.worker.ts", import.meta.url), { type: "module" }));
 
-export function useProbabilityDistribution(): Result & { calculate: (expression: string) => Promise<void> } {
+export function useProbabilityDistribution(): Result & { calculate: (expressions: string[]) => Promise<void> } {
 	const [result, setResult] = useState<Result>({ status: "idle" });
 
-	const calculate = useCallback(async (expression: string) => {
+	const calculate = useCallback(async (expressions: string[]) => {
 		setResult({ status: "loading" });
 		try {
-			const distribution = await calculator.calculateExpressionProbabilityDistribution(expression);
-			setResult({ status: "success", distribution });
+			const distributions = await Promise.all(
+				expressions.map((expression) => calculator.calculateExpressionProbabilityDistribution(expression)),
+			);
+			setResult({ status: "success", distributions });
 		} catch (error) {
 			setResult({ status: "error", error: getErrorMessage(error) });
 		}
@@ -27,25 +29,25 @@ function getErrorMessage(error: unknown) {
 
 interface IdleResult {
 	status: "idle";
-	distribution?: undefined;
+	distributions?: undefined;
 	error?: undefined;
 }
 
 interface LoadingResult {
 	status: "loading";
-	distribution?: undefined;
+	distributions?: undefined;
 	error?: undefined;
 }
 
 interface SuccessResult {
 	status: "success";
-	distribution: Map<number, number>;
+	distributions: Map<number, number>[];
 	error?: undefined;
 }
 
 interface ErrorResult {
 	status: "error";
-	distribution?: undefined;
+	distributions?: undefined;
 	error: string;
 }
 
