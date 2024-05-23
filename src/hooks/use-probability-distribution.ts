@@ -4,10 +4,10 @@ import { useCallback, useState } from "react";
 
 const calculator = wrap<Calculator>(new Worker(new URL("./calculator.worker.ts", import.meta.url), { type: "module" }));
 
-export function useProbabilityDistribution(expression: string): Result & { calculate: () => void } {
+export function useProbabilityDistribution(): Result & { calculate: (expression: string) => void } {
 	const [result, setResult] = useState<Result>({ status: "idle" });
 
-	const calculate = useCallback(() => {
+	const calculate = useCallback((expression: string) => {
 		void (async () => {
 			setResult({ status: "loading" });
 			try {
@@ -17,7 +17,7 @@ export function useProbabilityDistribution(expression: string): Result & { calcu
 				setResult({ status: "error", error: getErrorMessage(error) });
 			}
 		})();
-	}, [expression]);
+	}, []);
 
 	return { ...result, calculate };
 }
