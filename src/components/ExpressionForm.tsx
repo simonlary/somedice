@@ -4,13 +4,23 @@ import { FormEvent } from "react";
 export default function ExpressionForm({ onCalculate }: Props) {
 	return (
 		<form
-			className="mx-auto flex size-full flex-col items-center justify-center gap-4"
+			className="flex size-full flex-col items-center justify-center gap-4"
 			onSubmit={(e: FormEvent<FormElement>) => {
 				e.preventDefault();
 				onCalculate(e.currentTarget.expression.value);
 			}}
 		>
-			<input type="text" name="expression" className="w-full max-w-prose appearance-none rounded border px-3 py-2 text-gray-700" />
+			<div className="flex w-full items-center justify-center gap-4">
+				<label htmlFor="expression" className="text-lg font-bold text-white">
+					Expression:
+				</label>
+				<input
+					type="text"
+					name="expression"
+					placeholder="2d6 + 1d4 - 3"
+					className="w-full max-w-prose appearance-none rounded border px-3 py-2 text-gray-700"
+				/>
+			</div>
 			<Button variant="primary">Calculate</Button>
 		</form>
 	);
