@@ -8,7 +8,7 @@ export default function App() {
 	return (
 		<>
 			<main className="mx-auto flex size-full flex-col items-center justify-center gap-4 px-4 py-6">
-				<ExpressionForm onCalculate={(expression) => calculate(expression)} />
+				<ExpressionForm onCalculate={(expressions) => void calculate(expressions[0])} />
 				{status === "loading" && <div className="text-white">Calculating...</div>}
 				{status === "error" && <div className="text-white">Error: {error}</div>}
 				{status === "success" && <Visualizer distribution={distribution} />}

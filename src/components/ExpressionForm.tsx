@@ -1,35 +1,62 @@
 import Button from "./Button";
-import { FormEvent } from "react";
+import { useState } from "react";
 
 export default function ExpressionForm({ onCalculate }: Props) {
+	const [expressions, setExpressions] = useState<string[]>([""]);
+
 	return (
 		<form
 			className="flex size-full flex-col items-center justify-center gap-4"
-			onSubmit={(e: FormEvent<FormElement>) => {
-				e.preventDefault();
-				onCalculate(e.currentTarget.expression.value);
+			onSubmit={(event) => {
+				event.preventDefault();
+				onCalculate(expressions);
 			}}
 		>
-			<div className="flex w-full items-center justify-center gap-4">
-				<label htmlFor="expression" className="text-lg font-bold text-white">
-					Expression:
-				</label>
-				<input
-					type="text"
-					name="expression"
-					placeholder="2d6 + 1d4 - 3"
-					className="w-full max-w-prose rounded border px-3 py-2 text-black"
-				/>
+			{expressions.map((expression, index) => (
+				<div key={index} className="flex w-full items-center justify-center gap-4">
+					<input
+						type="text"
+						placeholder={`Expression ${index + 1}`}
+						className="w-full max-w-prose rounded border px-3 py-2 text-black"
+						value={expression}
+						onChange={(event) => {
+							const updatedExpressions = [...expressions];
+							updatedExpressions[index] = event.target.value;
+							setExpressions(updatedExpressions);
+						}}
+					/>
+					<Button
+						variant="danger"
+						type="button"
+						disabled={expressions.length <= 1}
+						onClick={() => {
+							if (expressions.length > 1) {
+								const updatedExpressions = [...expressions];
+								updatedExpressions.splice(index, 1);
+								setExpressions(updatedExpressions);
+							}
+						}}
+					>
+						Remove
+					</Button>
+				</div>
+			))}
+			<div className="flex gap-4">
+				<Button
+					variant="primary"
+					type="button"
+					onClick={() => {
+						setExpressions([...expressions, ""]);
+					}}
+				>
+					Add Expression
+				</Button>
+				<Button variant="primary">Calculate</Button>
 			</div>
-			<Button variant="primary">Calculate</Button>
 		</form>
 	);
 }
 
 interface Props {
-	onCalculate: (expression: string) => void;
-}
-
-interface FormElement extends HTMLFormElement {
-	expression: HTMLInputElement;
+	onCalculate: (expressions: string[]) => void;
 }

@@ -5,9 +5,8 @@ export function calculateProbabilityDistribution(expression: string) {
 	const { variables, replacedExpression } = extractVariables(expression);
 
 	// Calculate the probability distributions for each variable
-	const variableProbabilities = variables.map(
-		(variable) => calculateDiceRollProbabilityDistribution(variable.numberOfDice, variable.numberOfSides),
-		// calculateDiceRollProbabilityDistribution2(variable.numberOfDice, variable.numberOfSides),
+	const variableProbabilities = variables.map((variable) =>
+		calculateDiceRollProbabilityDistribution(variable.numberOfDice, variable.numberOfSides),
 	);
 
 	// Compile the expression for faster subsequent evaluations
