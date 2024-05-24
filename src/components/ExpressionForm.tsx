@@ -1,8 +1,8 @@
+import { useLocalStorageState } from "../hooks/use-local-storage-state";
 import Button from "./Button";
-import { useState } from "react";
 
 export default function ExpressionForm({ onCalculate }: Props) {
-	const [expressions, setExpressions] = useState<string[]>([""]);
+	const [expressions, setExpressions] = useLocalStorageState<string[]>("expressions", [""]);
 
 	return (
 		<form
