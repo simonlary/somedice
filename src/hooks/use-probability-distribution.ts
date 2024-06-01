@@ -13,7 +13,7 @@ export function useProbabilityDistribution(): Result & { calculate: (expressions
 			const distributions = await Promise.all(
 				expressions.map((expression) => calculator.calculateExpressionProbabilityDistribution(expression)),
 			);
-			setResult({ status: "success", distributions });
+			setResult({ status: "success", distributions, expressions });
 		} catch (error) {
 			setResult({ status: "error", error: getErrorMessage(error) });
 		}
@@ -30,24 +30,28 @@ function getErrorMessage(error: unknown) {
 interface IdleResult {
 	status: "idle";
 	distributions?: undefined;
+	expressions?: undefined;
 	error?: undefined;
 }
 
 interface LoadingResult {
 	status: "loading";
 	distributions?: undefined;
+	expressions?: undefined;
 	error?: undefined;
 }
 
 interface SuccessResult {
 	status: "success";
 	distributions: Map<number, number>[];
+	expressions: string[];
 	error?: undefined;
 }
 
 interface ErrorResult {
 	status: "error";
 	distributions?: undefined;
+	expressions?: undefined;
 	error: string;
 }
 

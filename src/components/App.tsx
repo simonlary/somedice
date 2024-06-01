@@ -3,7 +3,7 @@ import ExpressionForm from "./ExpressionForm";
 import Visualizer from "./Visualizer";
 
 export default function App() {
-	const { distributions, error, status, calculate } = useProbabilityDistribution();
+	const { distributions, expressions, error, status, calculate } = useProbabilityDistribution();
 
 	return (
 		<>
@@ -12,7 +12,7 @@ export default function App() {
 				<hr className="w-full border-t border-gray-700" />
 				{status === "loading" && <div className="text-white">Calculating...</div>}
 				{status === "error" && <div className="text-white">Error: {error}</div>}
-				{status === "success" && <Visualizer distributions={distributions} />}
+				{status === "success" && <Visualizer distributions={distributions} expressions={expressions} />}
 			</main>
 		</>
 	);
