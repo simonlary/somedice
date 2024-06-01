@@ -8,7 +8,7 @@ export default function GraphVisualizer({ data }: Props) {
 				<BarChart data={formattedData} layout="vertical">
 					<CartesianGrid horizontal={false} strokeDasharray={4} />
 					<XAxis dataKey="probability" tick={{ fill: "white" }} unit="%" type="number" />
-					<XAxis dataKey="probability" tick={{ fill: "white" }} unit="%" type="number" orientation="top" xAxisId="top"  />
+					<XAxis dataKey="probability" tick={{ fill: "white" }} unit="%" type="number" orientation="top" xAxisId="top" />
 					<YAxis dataKey="result" tick={{ fill: "white" }} type="category" interval={0} />
 					<Tooltip
 						itemStyle={{ color: "white" }}
