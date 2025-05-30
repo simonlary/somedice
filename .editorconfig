@@ -6,6 +6,3 @@ insert_final_newline = true
 end_of_line = lf
 indent_style = tab
 max_line_length = 140
-
-[*.yaml]
-indent_style = space
