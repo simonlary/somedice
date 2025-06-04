@@ -12,7 +12,7 @@ export default function App() {
 	}
 
 	return (
-		<div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-slate-900 to-zinc-800 p-4">
+		<div className="flex min-h-screen flex-col items-center bg-gradient-to-br from-slate-900 to-zinc-800 p-4">
 			<div className="m-4 flex max-w-full flex-col items-center rounded-2xl border border-slate-700 bg-zinc-900 p-8 shadow-xl">
 				<h1 className="mb-6 text-4xl font-extrabold tracking-tight text-slate-200 drop-shadow">SomeDice</h1>
 				<form onSubmit={handleSubmit} className="mb-8 flex w-full items-center justify-center gap-2">
