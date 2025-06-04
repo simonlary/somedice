@@ -8,7 +8,7 @@ export default function DistributionChart({ distribution }: { distribution: Map<
 				<span key={`value-${value}`} className="text-right font-bold text-slate-300">
 					{value}
 				</span>,
-				<span key={`bar-${value}`} className="h-5 rounded bg-slate-500" style={{ width: `${prob === 0 ? 0 : (prob / maxProb) * 100}%` }} />,
+				<span key={`bar-${value}`} className="h-5 rounded bg-slate-500" style={{ width: `${(prob / maxProb) * 100}%` }} />,
 				<span key={`percent-${value}`} className="text-sm text-slate-100">
 					{(prob * 100).toFixed(2)}%
 				</span>,
