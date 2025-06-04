@@ -1,4 +1,5 @@
 import DistributionChart from "./DistributionChart";
+import FormulaErrorDisplay from "./FormulaErrorDisplay";
 import { useDistributionWorker } from "./use-distribution-worker";
 import { useState } from "react";
 
@@ -30,7 +31,7 @@ export default function App() {
 					</button>
 				</form>
 				<div className="flex w-full flex-col items-center">
-					{result.result === "error" && <div className="mb-4 text-lg font-medium text-red-400">{result.error}</div>}
+					{result.result === "error" && <FormulaErrorDisplay formula={input} error={result.error} index={result.index} />}
 					{result.result === "idle" && <div className="py-8 text-slate-300">Enter a dice formula and press Calculate.</div>}
 					{result.result === "loading" && (
 						<div className="flex flex-col items-center gap-2 py-8">

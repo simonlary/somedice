@@ -8,6 +8,7 @@ interface SuccessResult {
 interface ErrorResult {
 	result: "error";
 	error: string;
+	index?: number;
 }
 
 interface LoadingResult {
@@ -35,7 +36,7 @@ export function useDistributionWorker(): [Result, (formula: string) => void] {
 					distribution: new Map<number, number>(e.data.distribution),
 				});
 			} else {
-				setResult({ result: "error", error: e.data.error });
+				setResult({ result: "error", error: e.data.error, index: e.data.index });
 			}
 		};
 		workerRef.current = worker;

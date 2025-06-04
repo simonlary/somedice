@@ -12,10 +12,6 @@ export function parse(tokens: Token[]): ASTNode {
 		return tokens[pos++];
 	}
 
-	function throwError(message: string): never {
-		throw new FormulaError(peek().index, message);
-	}
-
 	function parsePrimary(): ASTNode {
 		const token = peek();
 		if (token.type === "number") {
@@ -36,31 +32,32 @@ export function parse(tokens: Token[]): ASTNode {
 				consume();
 				return expr;
 			} else {
-				throwError("Expected closing parenthesis");
+				throw new FormulaError(next.index, "Expected closing parenthesis");
 			}
 		} else if (token.type === "op" && token.value === "-") {
 			consume();
 			const right = parsePrimary();
 			return { type: "binary", op: "-", left: { type: "number", value: 0 }, right };
 		}
-		throwError("Unexpected token in primary");
+		throw new FormulaError(token.index, "Unexpected token in primary");
 	}
 
 	function parseDiceSides(): number {
 		if (peek().type === "number") {
 			return (consume() as { type: "number"; value: number }).value;
 		}
-		throwError("Expected number after 'd'");
+		const token = peek();
+		throw new FormulaError(token.index, "Expected number after 'd'");
 	}
 
 	function parseKeep(): KeepData | undefined {
 		if (peek().type === "keep") {
-			const type = (consume() as { type: "keep"; value: "kh" | "kl" }).value;
+			const keepToken = consume() as { type: "keep"; value: "kh" | "kl"; index: number };
 			if (peek().type === "number") {
 				const keepCount = (consume() as { type: "number"; value: number }).value;
-				return { type, count: keepCount };
+				return { type: keepToken.value, count: keepCount };
 			}
-			throwError(`Expected number after ${type}`);
+			throw new FormulaError(keepToken.index + 2, `Expected number after ${keepToken.value}`);
 		}
 		return undefined;
 	}
@@ -91,7 +88,8 @@ export function parse(tokens: Token[]): ASTNode {
 
 	const ast = parseExpression();
 	if (peek().type !== "eof") {
-		throwError("Unexpected input after end of expression");
+		const token = peek();
+		throw new FormulaError(token.index, "Unexpected input after end of expression");
 	}
 	return ast;
 }
