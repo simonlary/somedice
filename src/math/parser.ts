@@ -1,7 +1,8 @@
 import { ASTNode, KeepData } from "./ast";
+import { FormulaError } from "./formula-error";
 import type { Token } from "./token";
 
-export function parseDiceFormula(tokens: Token[]): ASTNode {
+export function parse(tokens: Token[]): ASTNode {
 	let pos = 0;
 
 	function peek(): Token {
@@ -9,6 +10,10 @@ export function parseDiceFormula(tokens: Token[]): ASTNode {
 	}
 	function consume(): Token {
 		return tokens[pos++];
+	}
+
+	function throwError(message: string): never {
+		throw new FormulaError(peek().index, message);
 	}
 
 	function parsePrimary(): ASTNode {
@@ -31,21 +36,21 @@ export function parseDiceFormula(tokens: Token[]): ASTNode {
 				consume();
 				return expr;
 			} else {
-				throw new Error("Expected closing parenthesis");
+				throwError("Expected closing parenthesis");
 			}
 		} else if (token.type === "op" && token.value === "-") {
 			consume();
 			const right = parsePrimary();
 			return { type: "binary", op: "-", left: { type: "number", value: 0 }, right };
 		}
-		throw new Error("Unexpected token in primary");
+		throwError("Unexpected token in primary");
 	}
 
 	function parseDiceSides(): number {
 		if (peek().type === "number") {
 			return (consume() as { type: "number"; value: number }).value;
 		}
-		throw new Error("Expected number after 'd'");
+		throwError("Expected number after 'd'");
 	}
 
 	function parseKeep(): KeepData | undefined {
@@ -55,7 +60,7 @@ export function parseDiceFormula(tokens: Token[]): ASTNode {
 				const keepCount = (consume() as { type: "number"; value: number }).value;
 				return { type, count: keepCount };
 			}
-			throw new Error(`Expected number after ${type}`);
+			throwError(`Expected number after ${type}`);
 		}
 		return undefined;
 	}
@@ -86,7 +91,7 @@ export function parseDiceFormula(tokens: Token[]): ASTNode {
 
 	const ast = parseExpression();
 	if (peek().type !== "eof") {
-		throw new Error("Unexpected input after end of expression");
+		throwError("Unexpected input after end of expression");
 	}
 	return ast;
 }
