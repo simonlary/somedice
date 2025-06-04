@@ -14,7 +14,7 @@ export default function App() {
 	return (
 		<div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-blue-100 to-indigo-200 p-4 dark:from-gray-900 dark:to-gray-800">
 			<div className="m-4 flex max-w-full flex-col items-center rounded-2xl border border-indigo-200 bg-white p-8 shadow-xl dark:border-gray-700 dark:bg-gray-900">
-				<h1 className="mb-6 text-4xl font-extrabold tracking-tight text-indigo-700 drop-shadow dark:text-indigo-200">Dice Roller</h1>
+				<h1 className="mb-6 text-4xl font-extrabold tracking-tight text-indigo-700 drop-shadow dark:text-indigo-200">SomeDice</h1>
 				<form onSubmit={handleSubmit} className="mb-8 flex w-full items-center justify-center gap-2">
 					<input
 						type="text"
