@@ -6,9 +6,11 @@ import { useState } from "react";
 export default function App() {
 	const [input, setInput] = useState<string>("1d12 + 1d20");
 	const [result, calculate] = useDistributionWorker();
+	const [lastSubmittedFormula, setLastSubmittedFormula] = useState<string>(input);
 
 	function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
+		setLastSubmittedFormula(input);
 		calculate(input);
 	}
 
@@ -31,7 +33,7 @@ export default function App() {
 					</button>
 				</form>
 				<div className="flex w-full flex-col items-center">
-					{result.result === "error" && <FormulaErrorDisplay formula={input} error={result.error} index={result.index} />}
+					{result.result === "error" && <FormulaErrorDisplay formula={lastSubmittedFormula} error={result.error} index={result.index} />}
 					{result.result === "idle" && <div className="py-8 text-slate-300">Enter a dice formula and press Calculate.</div>}
 					{result.result === "loading" && (
 						<div className="flex flex-col items-center gap-2 py-8">
